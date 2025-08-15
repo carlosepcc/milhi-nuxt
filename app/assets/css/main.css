@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+@import "@nuxt/ui";
+@import "./animation.css";
+.screen {padding: 12px 16px;}
+ 
+h1 {
+    font-size: 1.5em;
+    margin-top: 0;
+  }
+  
+
+  
+@media(prefers-color-scheme: dark){  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong {
+    color: #ffffff;
+  }
+}
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  b,
+  strong,
+  th {
+    font-weight: 600;
+  }
+ 
+  .screen>h1{
+    font-weight: thin;
+    text-transform: uppercase;
+  }
