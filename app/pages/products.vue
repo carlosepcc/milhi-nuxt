@@ -10,7 +10,7 @@
               required />
           </div>
           <u-textarea class="w-full mb-2" v-model="newProduct.description"
-            placeholder="Descripción opcional..."></u-textarea>
+            placeholder="Descripción opcional..." variant="ghost" :rows="2" ></u-textarea>
           <div class="flex justify-end">
             <u-button icon="i-lucide-plus" type="submit">
               Añadir producto
@@ -57,27 +57,27 @@
                     </div>
                   </div>
                   <template #footer>
-                    <div class="space-y-2">
+                    <div @click.stop class="space-y-2">
                       <template v-for="loc in store.locations" :key="loc.id">
                         <u-card variant="soft" class="w-full"
                           v-if="store.getProductsByLocation(loc.id).some(p => p.id == element.id)">
                           <template v-for="p in store.getProductsByLocation(loc.id)" :key="p.id">
-                            <div v-if="p.id == element.id" class=" mb-4 flex justify-between">
-                              <div>
-                                <p :class="{ 'text-warning': p.unitsLeft < 0 }">
-                                  <b>{{ p.unitsLeft }}</b> de {{ p.totalBought }} comprados
-                                </p>
-                                <small>
+                            <div v-if="p.id == element.id" class=" flex justify-between">
+                              <details>
+                                <summary  :title="loc.name" :class="{ 'text-warning': p.unitsLeft < 0 }">
+                                  <span class="mr-2">{{ loc.emoji }}</span> <b>{{ p.unitsLeft }}</b> de {{ p.totalBought }} comprados
+                                </summary>
+                                <div class="text-sm pt-2 ps-2">
                                   <p>{{ p.totalIncome.toFixed(2) }} CUP <span class="text-muted">de ingreso total</span>
                                   </p>
                                   <p :class="{ 'text-success': p.unitsLeft <= 0 }">{{ (p.unitsLeft *
                                     p.avgBuyPrice).toFixed(2) }} CUP
                                     <span class="text-muted">por recibir</span>
                                   </p>
-                                </small>
-                              </div>
-                              <div>
-                                <span> {{ loc.emoji }}</span>
+                                </div>
+                              </details>
+                              <div :title="loc.name">
+                                <small> {{ loc.name.split(' ').at(0)?.at(0)}}{{loc.name.split(' ').at(1)?.at(0)??'' }}</small>
                               </div>
                             </div>
                           </template>

@@ -26,7 +26,7 @@
               </template>
               <div v-else class="flex flex-col flex-1" @click="editLocation(location)">
                 <strong>{{ location.name }}</strong>
-                <small class="text-muted font-mono">@{{ location.id.split('-').at(-1) }}</small>
+                <small class="text-muted font-mono">@{{ location.id.split('-').slice(1).join('-') }}</small>
               </div>
             </div>
             <div class="space-x-2">

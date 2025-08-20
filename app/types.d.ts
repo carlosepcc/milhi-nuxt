@@ -30,5 +30,6 @@ interface InventoryState {
     products: Product[];
     records: InventoryRecord[];
     locations: InventoryLocation[];
+    isHydrating: boolean;
 }
 interface CreateInventoryRecord extends Omit<InventoryRecord,"id">{}

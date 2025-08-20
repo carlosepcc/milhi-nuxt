@@ -2,27 +2,30 @@
   <div class="screen space-y-4">
     <h1 class="hidden">Registro</h1>
 
-    <u-collapsible v-model:open="isNewRecordFormOpen">
+    <u-modal :open="editingRecord != null">
       <template #content>
-        <form @submit.prevent class="rounded-md mb-6 p-0.5">
+        <form @submit.prevent class="rounded-md" v-if="editingRecord != null">
           <u-card variant="subtle">
-            <div class="cursor-pointer flex items-center justify-between mb-6">
-              <h3>Registrar nuevo movimiento</h3>
-              <u-button color="neutral" @click="isNewRecordFormOpen = false" size="sm" icon="material-symbols:close"
-                variant="ghost" />
-            </div>
+            <template #header>
+              <div class="cursor-pointer flex items-center justify-between"
+                @click.stop="isEditingRecordFormOpen = !isEditingRecordFormOpen">
+                <h3>Editar {{editingRecord.units>0 ? 'entrada':'venta'}}</h3>
+                <u-button @click="cancelEditRecord()" variant="ghost" class="self-center"
+                  color="neutral">&times;</u-button>
+              </div>
+            </template>
             <fieldset class="flex flex-col gap-3 mb-3 pb-3">
               <div class="flex gap-3">
-                <u-input icon="material-symbols:today" variant="subtle" class="flex-1" type="date"
-                  v-model="newRecord.date" required />
-                <u-select icon="material-symbols:store" variant="subtle" class="flex-1" :ui="{ content: 'min-w-fit' }"
-                  label-key="name" value-key="id" v-model="newRecord.location" required :items="store.locations">
+                <u-input icon="material-symbols:today" variant="outline" class="flex-1" type="date"
+                  v-model="editingRecord.date" required />
+                <u-select icon="material-symbols:store" variant="outline" class="flex-1" :ui="{ content: 'min-w-fit' }"
+                  label-key="name" value-key="id" v-model="editingRecord.location" required :items="store.locations">
                   <template #item-leading="{ item }">
                     {{ item.emoji }}
                   </template>
                   <template #leading>
-                    <template v-if="newRecord.location">
-                      {{ store.getLocationById(newRecord.location)?.emoji }}
+                    <template v-if="editingRecord.location">
+                      {{ store.getLocationById(editingRecord.location)?.emoji }}
                     </template>
                   </template>
                   <template #content-bottom>
@@ -35,8 +38,8 @@
               </div>
               <div class="flex gap-3 ">
 
-                <u-select icon="mage:box-3d-check-fill" size="xl" class="w-full" variant="subtle" label-key="name"
-                  value-key="id" :items="store.products" v-model="newRecord.productId"
+                <u-select icon="mage:box-3d-check-fill" size="xl" class="w-full" variant="outline" label-key="name"
+                  value-key="id" :items="store.products" v-model="editingRecord.productId"
                   placeholder="Seleccione el producto">
                   <template #leading="{ modelValue }">
                     <span v-if="modelValue && store.getProductById(modelValue)?.emoji"
@@ -54,126 +57,30 @@
                 </u-select>
               </div>
               <div class="flex gap-3">
-                <u-form-field label="Cantidad de unidades">
+                <u-form-field label="Cantidad">
 
-                  <u-input size="xl" placeholder="Cantidad" variant="outline" type="number"
-                    v-model.number="newRecord.units" required />
+                  <u-input size="xl" placeholder="100.." variant="outline" type="number"
+                    v-model.number="editingRecord.units" required />
                 </u-form-field>
                 <u-form-field label="Precio unitario">
-                  <u-input size="xl" variant="outline" type="number" v-model.number="newRecord.price" min="0" step="10"
-                    required>
-                    <template #leading>
-                      <b class="text-muted">CUP</b>
-                    </template>
-                  </u-input>
-                </u-form-field>
-              </div>
-              <u-textarea :rows="2" variant="ghost" class="w-full" placeholder="Detalles opcionales.."
-                v-model="newRecord.details" />
-
-            </fieldset>
-            <div v-if="isNewRecordFormOpen" class="flex justify-end gap-3 " @click.stop="isNewRecordFormOpen = true">
-              <u-button :disabled="isNewRecordFormOpen && !isNewRecordValid" icon="i-lucide-arrow-down" class="flex-1"
-                size="xl" color="info" variant="solid" @click.prevent="handleAddEntry">Entrada</u-button>
-              <u-button :disabled="isNewRecordFormOpen && !isNewRecordValid"
-                icon="material-symbols:add-shopping-cart-outline-rounded" class="flex-1" size="xl" variant="solid"
-                @click.prevent="handleAddSell">Venta</u-button>
-            </div>
-          </u-card>
-        </form>
-      </template>
-    </u-collapsible>
-    <u-modal :open="editingRecord != null">
-      <template #content>
-        <form @submit.prevent class="rounded-md" v-if="editingRecord != null">
-          <u-card variant="subtle">
-            <template #header>
-              <div class="cursor-pointer flex items-center justify-between"
-                @click.stop="isEditingRecordFormOpen = !isEditingRecordFormOpen">
-                <h3>Editar movimiento</h3>
-                <u-button @click="cancelEditRecord()" variant="ghost" color="neutral"
-                  icon="material-symbols:close"></u-button>
-              </div>
-            </template>
-            <fieldset class="flex flex-col gap-3 mb-3 pb-3">
-              <div class="flex gap-3 ">
-                <u-input size="xl" placeholder="Cantidad" class="max-w-28" variant="subtle" type="number"
-                  v-model.number="editingRecord.units" required />
-                <u-select icon="i-lucide-box" size="xl" class="w-full" variant="subtle" label-key="name" value-key="id"
-                  :items="store.products" v-model="editingRecord.productId" placeholder="Seleccione el producto">
-                  <template #leading="{ modelValue }">
-                    <span v-if="modelValue && store.getProductById(modelValue)?.emoji"
-                      v-text="store.getProductById(modelValue)?.emoji"></span>
-                  </template>
-                  <template #item-leading="{ item }">
-                    {{ item.emoji }}
-                  </template>
-                  <template #content-top>
-                    <nuxt-link href="/products" class="p-1">
-                      <u-button size="xl" class="w-full" variant="ghost">+ Nuevo producto</u-button>
-                    </nuxt-link>
-                  </template>
-                </u-select>
-                <!-- <label class="w-full">
-              <select class="w-full" v-model="editingRecord.productId" required>
-                <option value="" disabled>Selecciona un producto</option>
-                <option v-for="product in store.products" :key="product.id" :value="product.id">
-                  {{ product.emoji }} {{ product.name }}
-                </option>
-              </select>
-            </label> -->
-              </div>
-              <div class="flex gap-3">
-                <u-input size="xl" variant="subtle" class="flex-1" type="date" v-model="editingRecord.date" required />
-                <u-select size="xl" variant="subtle" class="flex-1" :ui="{ content: 'min-w-fit' }" label-key="name"
-                  value-key="id" v-model="editingRecord.location" required :items="store.locations">
-                  <template #item-leading="{ item }">
-                    {{ item.emoji }}
-                  </template>
-                  <template #leading>
-                    <template v-if="newRecord.location">
-                      {{ store.getLocationById(newRecord.location)?.emoji }}
-                    </template>
-                  </template>
-
-                  <template #content-bottom>
-                    <nuxt-link href="/settings" class="p-1">
-                      <u-button class="w-full" color="neutral" variant="link" icon="material-symbols:add">Nuevo
-                        local</u-button>
-                    </nuxt-link>
-                  </template>
-                </u-select>
-              </div>
-              <div class="flex gap-3">
-                <u-form-field label="Precio unitario">
-                  <u-input size="xl" variant="subtle" type="number" v-model.number="editingRecord.price" min="0"
+                  <u-input size="xl" variant="outline" type="number" v-model.number="editingRecord.price" min="0"
                     step="10" required>
-                    <template #leading>
+                    <template #trailing>
                       <b class="text-muted">CUP</b>
                     </template>
                   </u-input>
                 </u-form-field>
-                <!-- <label>
-              Cantidad (u)
-              <u-input variant="subtle" type="number" v-model.number="editingRecord.units" min="1" required/>
-            </label> -->
-                <!-- <label>
-              Precio unitario
-              <input type="number" v-model.number="editingRecord.price" min="0" step="0.01" required>
-            </label> -->
               </div>
-              <label style="display: block;">
-                <u-textarea size="xl" variant="subtle" class="w-full" placeholder="Detalles opcionales.."
-                  v-model="editingRecord.details" />
-              </label>
+              <u-textarea size="xl" variant="subtle" class="w-full" placeholder="Detalles opcionales.."
+                v-model="editingRecord.details" />
             </fieldset>
             <div class="flex justify-end gap-3 " v-if="editingRecord != null">
               <u-button :disabled="isEditingRecordFormOpen && !isEditingRecordValid" icon="i-lucide-arrow-down"
-                class="flex-1" size="xl" color="info" :variant="editingRecord.units >= 0 ? 'solid' : 'subtle'"
+                class="flex-1" size="xl" color="info" :variant="editingRecord.units >= 0 ? 'solid' : 'outline'"
                 @click.prevent="store.updateRecord(editingRecord); cancelEditRecord()">Entrada</u-button>
               <u-button :disabled="isEditingRecordFormOpen && !isEditingRecordValid"
                 icon="material-symbols:add-shopping-cart-outline-rounded" class="flex-1" size="xl"
-                :variant="editingRecord.units < 0 ? 'solid' : 'subtle'"
+                :variant="editingRecord.units < 0 ? 'solid' : 'outline'"
                 @click.prevent="store.updateRecord({ ...editingRecord, units: Math.abs(editingRecord.units) * -1 }); cancelEditRecord()">Venta</u-button>
             </div>
           </u-card>
@@ -202,15 +109,18 @@
     </div>
 
     <section class="mb-28">
-      <p class="my-4" v-if="filteredSortedRecords.length === 0">Sin movimientos registrados.</p>
+      <p class="my-4" v-if="store.isHydrating">
+      <div class="animate-spin"></div>Cargando datos...</p>
+
+      <p class="my-4" v-else-if="filteredSortedRecords.length === 0">Sin movimientos registrados.</p>
 
 
       <UTimeline :default-value="2" :items="filteredSortedRecords" class="max-w-128">
 
         <template #indicator="{ item }">
-          <div class="rounded-full p-0.5 aspect-1 size-full text-center bg-elevated border-2"
-            :class="item.units > 0 ? 'border-secondary' : 'border-primary'">{{
-              store.getProductById(item.productId)?.emoji }}
+          <div class="rounded-full p-0.5 aspect-1 size-full text-center border-2 font-bold text-white"
+            :class="item.units > 0 ? 'bg-secondary' : 'bg-primary'">{{
+              Math.abs(item.units) }}
           </div>
         </template>
         <template #date="{ item }">
@@ -222,8 +132,9 @@
                 <!-- First column -->
                 <div class="">
                   <div class="space-x-2">
-                    <b class="text-secondary" :class="item.units > 0 ? 'text-info' : 'text-success'">{{ item.units
-                      }}</b>
+                    <b class="text-secondary" :class="item.units > 0 ? 'text-info' : 'text-success'">{{
+                      getProductEmoji(item.productId)
+                    }}</b>
                     <strong>{{ getProductName(item.productId) }}</strong>
                   </div>
                   <div class="flex gap-3 items-baseline mt-2">
@@ -244,7 +155,9 @@
                 </div>
               </div>
 
-              <i>{{ item.details }}</i>
+              <p class="w-[80%] overflow-auto whitespace-wrap max-w-sm italic ">
+                {{ item.details }}
+              </p>
             </u-card>
             <!-- Actions -->
             <div class="pt-2">
@@ -255,10 +168,100 @@
           </div>
         </template>
       </UTimeline>
+      <div class="h-72">
+
+        <u-collapsible v-model:open="isNewRecordFormOpen"
+          class="fixed bottom-0 right-0 left-0 w-full">
+          <template #content>
+            <form @submit.prevent class="mb-16">
+              <u-card variant="subtle" class="bg-elevated shadow-xl max-w-sm mx-auto m-4">
+                <!-- <div class="cursor-pointer flex items-center justify-between mb-6">
+                  <h3>Nuevo movimiento</h3>
+                  <u-button color="neutral" @click="isNewRecordFormOpen = false" size="sm"
+                    variant="ghost">&times;</u-button>
+                </div> -->
+                <div class="h-1 w-16 transition-all active:w-12 mx-auto rounded-full bg-accented -translate-y-2.5 cursor-pointer" @click.stop="isNewRecordFormOpen = !isNewRecordFormOpen" title="Ocultar"></div>
+                <fieldset class="flex flex-col gap-3 mb-3 pb-3">
+                  <div class="flex gap-3">
+                    <u-input icon="material-symbols:today" variant="outline" class="flex-1" type="date"
+                      v-model="newRecord.date" required />
+                    <u-select icon="material-symbols:store" variant="outline" class="flex-1"
+                      :ui="{ content: 'min-w-fit' }" label-key="name" value-key="id" v-model="newRecord.location" required
+                      :items="store.locations">
+                      <template #item-leading="{ item }">
+                        {{ item.emoji }}
+                      </template>
+                      <template #leading>
+                        <template v-if="newRecord.location">
+                          {{ store.getLocationById(newRecord.location)?.emoji }}
+                        </template>
+                      </template>
+                      <template #content-bottom>
+                        <nuxt-link href="/settings" class="p-1">
+                          <u-button class="w-full" color="neutral" variant="link" icon="mdi:storefront-plus">Nuevo
+                            local</u-button>
+                        </nuxt-link>
+                      </template>
+                    </u-select>
+                  </div>
+                  <div class="flex gap-3 ">
+
+                    <u-select icon="mage:box-3d-check-fill" size="xl" class="w-full" variant="outline" label-key="name"
+                      value-key="id" :items="store.products" v-model="newRecord.productId"
+                      placeholder="Seleccione el producto">
+                      <template #leading="{ modelValue }">
+                        <span v-if="modelValue && store.getProductById(modelValue)?.emoji"
+                          v-text="store.getProductById(modelValue)?.emoji"></span>
+                      </template>
+                      <template #item-leading="{ item }">
+                        {{ item.emoji }}
+                      </template>
+                      <template #content-top>
+                        <nuxt-link href="/products" class="p-1">
+                          <u-button class="w-full" variant="link" color="neutral" icon="mage:box-3d-plus-fill">Nuevo
+                            producto</u-button>
+                        </nuxt-link>
+                      </template>
+                    </u-select>
+                  </div>
+                  <div class="flex gap-3">
+                    <u-form-field class="flex-2/5" label="Cantidad">
+
+                      <u-input size="xl" placeholder="100.." variant="outline" type="number"
+                        v-model.number="newRecord.units" required />
+                    </u-form-field>
+                    <u-form-field class="flex-3/5" label="Precio unitario" :hint="`($${Math.abs(newRecord.units)*newRecord.price} total)`">
+                      <u-input size="xl" variant="outline" type="number" v-model.number="newRecord.price" min="0"
+                        step="10" required>
+
+                        <template #trailing>
+                          <b class="text-muted">CUP</b>
+                        </template>
+                      </u-input>
+                    </u-form-field>
+                  </div>
+                  <u-textarea :rows="2" variant="ghost" class="w-full" placeholder="Detalles opcionales.."
+                    v-model="newRecord.details" />
+
+                </fieldset>
+                <div v-if="isNewRecordFormOpen" class="flex justify-end gap-3 " @click.stop="isNewRecordFormOpen = true">
+                  <u-button :disabled="isNewRecordFormOpen && !isNewRecordValid" icon="i-lucide-arrow-down" class="flex-1"
+                    size="xl" color="info" variant="solid" @click.prevent="handleAddEntry">Entrada</u-button>
+                  <u-button :disabled="isNewRecordFormOpen && !isNewRecordValid"
+                    icon="material-symbols:add-shopping-cart-outline-rounded" class="flex-1" size="xl" variant="solid"
+                    @click.prevent="handleAddSell">Venta</u-button>
+                </div>
+              </u-card>
+            </form>
+          </template>
+        </u-collapsible>
+
+      </div>
+      <div ref="bottomTag"></div>
     </section>
-    <ButtonFab :color="isNewRecordFormOpen ? 'neutral' : 'primary'" :variant="isNewRecordFormOpen ? 'outline' : 'solid'"
+    <ButtonFab :color="isNewRecordFormOpen ? 'neutral' : 'primary'" :variant="isNewRecordFormOpen ? 'soft' : 'solid'"
       @click="isNewRecordFormOpen = !isNewRecordFormOpen"
-      :icon="isNewRecordFormOpen ? 'material-symbols:keyboard-arrow-up' : undefined" />
+      :icon="isNewRecordFormOpen ? 'material-symbols:keyboard-arrow-down' : undefined" />
     <!-- <u-button size="xl" class="fixed bottom-24 right-4 shadow-2xl" icon="material-symbols:add"></u-button> -->
 
   </div>
@@ -266,10 +269,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useInventoryStore } from '~/stores/useInventoryStore';
+import { useInventoryStore } from '@/stores/useInventoryStore';
 useSeoMeta({
   title: "Registro"
 })
+const bottomTag = ref<HTMLDivElement>();
 const store = useInventoryStore();
 const isNewRecordFormOpen = useState<boolean>('isNewRecordFormOpen', () => false)
 const newRecord = useState<Omit<InventoryRecord, 'id'>>('newRecord', () => ({
@@ -278,7 +282,7 @@ const newRecord = useState<Omit<InventoryRecord, 'id'>>('newRecord', () => ({
   type: 'sell' as 'buy' | 'sell',
   units: 10,
   price: 100,
-  date: new Date().toISOString(),
+  date: new Date().toLocaleDateString('en-CA'),
   details: '',
 }));
 const isNewRecordValid = computed<boolean>(() => {
@@ -287,7 +291,7 @@ const isNewRecordValid = computed<boolean>(() => {
   else return false
 })
 const recordFilters = useState<{ location: 'all' | string }>('recordFilters', () => ({ location: 'all' }));
-const recordSorting = useState<{ date: 'desc' | 'asc' }>('recordSorting', () => ({ date: 'desc' }));
+const recordSorting = useState<{ date: 'desc' | 'asc' }>('recordSorting', () => ({ date: 'asc' }));
 
 const editingRecord = useState<InventoryRecord | null>('editingRecord', () => null);
 const handleEditRecord = (record: InventoryRecord) => {
@@ -313,6 +317,8 @@ const updateRecord = () => {
 const addRecord = (data: CreateInventoryRecord = newRecord.value) => {
   if (!data.productId || !data.location) return;
   store.addRecord(data);
+  nextTick(() =>
+    bottomTag.value?.scrollIntoView({ behavior: 'smooth' }));
   // Reset form
   newRecord.value = {
     ...newRecord.value,

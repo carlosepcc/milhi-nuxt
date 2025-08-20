@@ -5,6 +5,7 @@ export const useInventoryStore = defineStore("inventory", {
     products: [],
     records: [],
     locations: [],
+    isHydrating: false
   }),
 
   getters: {
@@ -195,5 +196,16 @@ export const useInventoryStore = defineStore("inventory", {
   },
 
   // Enable persistence
-  persist: true,
+  persist: {
+    omit:['isHydrating'],
+    beforeHydrate: (ctx)=>{
+      console.log("Preparing to hydrate store", ctx)
+      ctx.store.isHydrating = true
+    },
+    afterHydrate: (ctx)=>{
+      console.log("Store hydrated from localStorage",ctx)
+
+ctx.store.isHydrating = false
+    },
+  },
 });
