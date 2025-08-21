@@ -41,6 +41,8 @@ export const useInventoryStore = defineStore("inventory", {
       state.products.find((p) => p.id === id),
     getLocationById: (state) => (id: string) =>
       state.locations.find((l) => l.id === id),
+    getRecordById: (state) => (id: string) =>
+      state.records.find((r) => r.id === id),
 
     getProductsByLocation: (state) => (locationId: string) => {
       const productsMap = new Map();

@@ -7,9 +7,9 @@
         <form @submit.prevent class="rounded-md" v-if="editingRecord != null">
           <u-card variant="subtle">
             <template #header>
-              <div class="cursor-pointer flex items-center justify-between"
+              <div class="cursor-pointer flex items-center justify-between" v-if="editingRecord"
                 @click.stop="isEditingRecordFormOpen = !isEditingRecordFormOpen">
-                <h3>Editar {{editingRecord.units>0 ? 'entrada':'venta'}}</h3>
+                <h3>Editar {{store.getRecordById(editingRecord.id)?.units > 0 ? 'entrada':'venta'}}</h3>
                 <u-button @click="cancelEditRecord()" variant="ghost" class="self-center"
                   color="neutral">&times;</u-button>
               </div>
@@ -74,14 +74,14 @@
               <u-textarea size="xl" variant="subtle" class="w-full" placeholder="Detalles opcionales.."
                 v-model="editingRecord.details" />
             </fieldset>
-            <div class="flex justify-end gap-3 " v-if="editingRecord != null">
+            <div class="flex justify-end gap-3 " v-if="editingRecord">
               <u-button :disabled="isEditingRecordFormOpen && !isEditingRecordValid" icon="i-lucide-arrow-down"
-                class="flex-1" size="xl" color="info" :variant="editingRecord.units >= 0 ? 'solid' : 'outline'"
-                @click.prevent="store.updateRecord(editingRecord); cancelEditRecord()">Entrada</u-button>
+                class="flex-1" size="xl" color="info" :variant="editingRecord && store.getRecordById(editingRecord.id)?.units >= 0 ? 'solid' : 'outline'"
+                @click.prevent="editingRecord && (store.updateRecord(editingRecord), cancelEditRecord())">Entrada</u-button>
               <u-button :disabled="isEditingRecordFormOpen && !isEditingRecordValid"
                 icon="material-symbols:add-shopping-cart-outline-rounded" class="flex-1" size="xl"
-                :variant="editingRecord.units < 0 ? 'solid' : 'outline'"
-                @click.prevent="store.updateRecord({ ...editingRecord, units: Math.abs(editingRecord.units) * -1 }); cancelEditRecord()">Venta</u-button>
+                :variant="editingRecord && store.getRecordById(editingRecord.id)?.units < 0 ? 'solid' : 'outline'"
+                @click.prevent="editingRecord && (store.updateRecord({ ...editingRecord, units: Math.abs(editingRecord.units) * -1 }), cancelEditRecord())">Venta</u-button>
             </div>
           </u-card>
         </form>
