@@ -88,13 +88,12 @@
           <u-button variant="outline" @click="$pwa?.showInstallPrompt">Prompt</u-button>
         </div>
         </div></template>
-        <div class="space-y-2">
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.isInstalled ? 'success' : 'warning'">{{$pwa?.isInstalled? '&check;':'&excl; &nbsp;'}} <small>{{ $pwa?.isInstalled }}</small></u-badge> Installed</p>
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.isPWAInstalled  ? 'success' : 'warning'">{{$pwa?.isPWAInstalled? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa?.isPWAInstalled }}</small></u-badge> PWA Installed</p>
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.offlineReady  ? 'success' : 'warning'">{{$pwa?.offlineReady? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa?.offlineReady }}</small></u-badge> Offline ready</p>
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.swActivated  ? 'success' : 'warning'">{{$pwa?.swActivated? '&check;':'&excl;  &nbsp;'}}<small>{{ $pwa?.swActivated }}</small></u-badge>  Service Worker Activated</p>
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.needRefresh  ? 'warning' : 'success'">{{$pwa?.needRefresh? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa?.needRefresh }}</small></u-badge>  Needs refresh <u-button @click="$pwa?.updateServiceWorker">Update</u-button></p>
-          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.registrationError  ? 'warning' : 'success'">{{$pwa?.registrationError? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa?.registrationError }}</small></u-badge>  Registration error</p>
+        <div class="space-y-2" v-if="$pwa">
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa.isPWAInstalled  ? 'success' : 'warning'">{{$pwa.isPWAInstalled? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa.isPWAInstalled }}</small></u-badge> PWA Installed</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa.offlineReady  ? 'success' : 'warning'">{{$pwa.offlineReady? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa.offlineReady }}</small></u-badge> Offline ready</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa.swActivated  ? 'success' : 'warning'">{{$pwa.swActivated? '&check;':'&excl;  &nbsp;'}}<small>{{ $pwa.swActivated }}</small></u-badge>  Service Worker Activated</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa.needRefresh  ? 'warning' : 'success'">{{$pwa.needRefresh? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa.needRefresh }}</small></u-badge>  Needs refresh <u-button v-if="$pwa.needRefresh" @click="$pwa.updateServiceWorker">Update</u-button></p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa.registrationError  ? 'warning' : 'success'">{{$pwa.registrationError? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa.registrationError }}</small></u-badge>  Registration error</p>
           
         </div>
         <pre class="my-2 text-xs font-black">{{ $pwa }}</pre>

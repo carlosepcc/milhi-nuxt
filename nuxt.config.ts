@@ -97,18 +97,19 @@ export default defineNuxtConfig({
       display: "standalone",
     },
     workbox: {
-      globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+      globPatterns: ["**/*.{js,css,html,svg,png,ico,json,webp,woff2}"],
       cleanupOutdatedCaches: true,
       clientsClaim: true,
-      navigateFallback: "/",
+      skipWaiting: true,
+      navigateFallback: "/index.html",
       runtimeCaching: [
         {
-          urlPattern: /\.(?:png|jpg|jpeg|gif|bmp|tiff|webp)$/,
+          urlPattern: /\.(?:png|jpg|jpeg|gif|bmp|tiff|webp|svg|icon|woff2?)$/,
           handler: "CacheFirst",
           options: {
-            cacheName: "images",
+            cacheName: "assets",
             expiration: {
-              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 días
+              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
             },
           },
         },
