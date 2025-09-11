@@ -67,7 +67,7 @@ export default defineNuxtConfig({
   },
   pwa: {
     manifest: {
-      name: "Milhi: Registro de compra-venta",
+      name: "Milhi v0.8: Registro de compra-venta",
       short_name: "Milhi",
       theme_color: "#ffffff",
       icons: [

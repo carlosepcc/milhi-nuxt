@@ -83,7 +83,16 @@
       <template #header><b>Información para desarrolladores</b></template>
       <u-card>
         <template #header><b>PWA</b></template>
-        <pre class="m text-xs">{{ $pwa }}</pre>
+        <div class="space-y-2">
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.isInstalled ? 'success' : 'warning'">{{$pwa?.isInstalled? '&check;':'&excl; &nbsp;'}} <small>{{ $pwa?.isInstalled }}</small></u-badge> Installed</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.isPWAInstalled  ? 'success' : 'warning'">{{$pwa?.isPWAInstalled? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa?.isPWAInstalled }}</small></u-badge> PWA Installed</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.offlineReady  ? 'success' : 'warning'">{{$pwa?.offlineReady? '&check;':'&excl;  &nbsp;'}} <small>{{ $pwa?.offlineReady }}</small></u-badge> Offline ready</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.swActivated  ? 'success' : 'warning'">{{$pwa?.swActivated? '&check;':'&excl;  &nbsp;'}}<small>{{ $pwa?.swActivated }}</small></u-badge>  Service Worker Activated</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.needRefresh  ? 'warning' : 'success'">{{$pwa?.needRefresh? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa?.needRefresh }}</small></u-badge>  Needs refresh</p>
+          <p class="flex items-center gap-2"><u-badge variant="soft" :color="$pwa?.registrationError  ? 'warning' : 'success'">{{$pwa?.registrationError? '&excl;  &nbsp;':'&check;'}} <small>{{ $pwa?.registrationError }}</small></u-badge>  Registration error</p>
+          
+        </div>
+        <pre class="my-2 text-xs font-black">{{ $pwa }}</pre>
       </u-card>
     </u-card>
   </div>
