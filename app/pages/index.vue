@@ -1,28 +1,28 @@
 <template>
   <div class="screen space-y-6">
     <h1 class="hidden">Resumen</h1>
-    <div class="space-y-4">
+    <div class="space-y-4 flex flex-wrap justify-center">
       <u-card variant="soft">
-        <h3>Total invertido</h3>
+        <p class="font-light text-muted">Total invertido</p>
+        <p class="text-sm font-light text-muted">En {{ store.buyTransactions }} compras</p>
         <p>${{ store.totalSpent.toFixed(2) }}</p>
-        <small>En {{ store.buyTransactions }} compras</small>
       </u-card>
-      <u-card variant="soft">
-        <h3>Total de ingresos</h3>
+      <u-card  variant="soft">
+        <p class="font-light text-muted">Total de ingresos</p>
+        <p class="text-sm font-light text-muted">De {{ store.sellTransactions }} ventas</p>
         <p>${{ store.totalIncome.toFixed(2) }}</p>
-        <small>Des {{ store.sellTransactions }} ventas</small>
       </u-card>
-      <u-card variant="soft" :class="{ 'profit': store.estimatedProfit > 0, 'loss': store.estimatedProfit < 0 }">
-        <h3>Ganancia</h3>
-        <p :class="{ 'text-warning': store.estimatedProfit < 0 }">{{ store.estimatedProfit.toFixed(2) }} CUP</p>
-        <small class="text-warning" v-if="store.estimatedProfit < 0">En recuperación de inversión</small>
+      <u-card  variant="soft" :class="{ 'profit': store.estimatedProfit > 0, 'loss': store.estimatedProfit < 0 }">
+        <p class="font-light text-muted">Ganancia</p>
+        <p class="text-warning" v-if="store.estimatedProfit < 0">En recuperación de inversión</p>
+        <p class="" :class="{ 'text-warning': store.estimatedProfit < 0 }">{{ store.estimatedProfit.toFixed(2) }} CUP</p>
       </u-card>
-      <u-card variant="soft" v-if="store.records.length > 0">
-        <h3>Margen de ganancia</h3>
-        <p>{{ (store.profitMargin * 100).toFixed(1) }}%</p>
-        <small>Por todas las transacciones</small>
+      <u-card  variant="soft" v-if="store.records.length > 0">
+        <p class="font-light text-muted">Margen de ganancia</p>
+        <p class="text-sm font-light text-muted" >Por todas las transacciones</p>
+        <p class="">{{ (store.profitMargin * 100).toFixed(1) }}%</p>
       </u-card>
-      <hr />
+     <u-separator/>
       <h3>{{ store.products.length }} &nbsp;Productos en total</h3>
     </div>
     <div class="space-y-4 mb-20">

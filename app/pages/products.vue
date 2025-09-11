@@ -77,7 +77,7 @@
                                 </div>
                               </details>
                               <div :title="loc.name">
-                                <small> {{ loc.name.split(' ').at(0)?.at(0)}}{{loc.name.split(' ').at(1)?.at(0)??'' }}</small>
+                                <u-badge variant="soft" color="neutral" class="font-black"> {{ loc.name.split(' ').at(0)?.at(0)}}{{loc.name.split(' ').at(1)?.at(0)??'' }}</u-badge>
                               </div>
                             </div>
                           </template>
