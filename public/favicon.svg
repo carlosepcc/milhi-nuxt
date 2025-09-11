@@ -7,8 +7,8 @@
    viewBox="0 0 12.7 12.7"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="logo.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="favicon.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,15 +24,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="4.2230385"
-     inkscape:cx="-21.785262"
-     inkscape:cy="16.575743"
-     inkscape:window-width="1920"
-     inkscape:window-height="1008"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="48.083261"
+     inkscape:cy="23.334524"
+     inkscape:window-width="1366"
+     inkscape:window-height="677"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="22"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:pageshadow="2" />
   <defs
      id="defs2" />
   <g
@@ -42,18 +43,21 @@
     <path
        id="rect111"
        style="fill:#333333;stroke-width:0.255449"
-       d="M 4.7797586,1.3434558 C 3.5419803,3.2518296 6.5234939,9.0764923 1.1055921,9.4418631 2.3436275,8.0671472 -0.01091006,1.5821729 4.7797586,1.3434558 Z"
+       d="M 2.6255396,2.4376278 C 3.8686084,5.2623402 0.8869782,10.507201 6.2997061,10.536035 5.1914686,8.4770217 8.0599533,2.434046 2.6255396,2.4376278 Z"
        sodipodi:nodetypes="ccc" />
     <circle
-       style="fill:#333333;stroke-width:0.267638"
-       id="path372"
-       cx="9.6323233"
-       cy="5.7731681"
-       r="1.4976635" />
-    <path
-       id="path374"
-       style="fill:#333333;stroke-width:0.255449"
-       d="M 11.360718,7.8461635 C 9.4523449,9.0839418 3.6276822,6.1024282 3.2623114,11.52033 4.6370273,10.282294 11.122001,12.636832 11.360718,7.8461635 Z"
-       sodipodi:nodetypes="ccc" />
+       style="fill:#333333;stroke-width:0.22169"
+       id="circle1304"
+       cx="9.212307"
+       cy="3.8561256"
+       r="1.240546" />
+    <rect
+       style="fill:#000000;fill-rule:evenodd;stroke-width:0.209101"
+       id="rect1452"
+       width="2.4208918"
+       height="3.9597256"
+       x="8.087142"
+       y="6.1876478"
+       ry="1.2104459" />
   </g>
 </svg>
