@@ -103,17 +103,18 @@ export default defineNuxtConfig({
       ],
       screenshots:[
         {
-          src: "https://picsum.photos/640/360",//TODO: screenshots
+          src: "https://images.ecency.com/DQmcU2J5h2S819r7sYfHo8QrFdVDVwFxU6JcSWKdq2hka2z/deniro_tr.jpg",//TODO: screenshots
           sizes: "1280x720",
           type: "image/png",
           form_factor: "wide",
         },
         {
-          src: "https://picsum.photos/640/360",//TODO: screenshots
+          src: "https://images.ecency.com/DQmcU2J5h2S819r7sYfHo8QrFdVDVwFxU6JcSWKdq2hka2z/deniro_tr.jpg",//TODO: screenshots
           sizes: "320x568",
           type: "image/png",
         },
       ],
+      display_override: ["fullscreen", "minimal-ui"],
       display: "standalone",
     },
     workbox: {
