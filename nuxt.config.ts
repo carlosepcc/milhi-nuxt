@@ -22,11 +22,12 @@ export default defineNuxtConfig({
   ui: {
     fonts: false,
   },
+  ssr: false,
   app: {
     pageTransition: { name: "slide-top", mode: "out-in" },
     head: {
-      title: "MiLhi",
-      titleTemplate: "MiLhi | %s",
+      title: "Bisne",
+      titleTemplate: "Bisne | %s",
       htmlAttrs: {
         lang: "es-CU",
       },
@@ -66,10 +67,16 @@ export default defineNuxtConfig({
     storage: "localStorage",
   },
   pwa: {
+    registerType:'autoUpdate',
+    strategies:'generateSW',
+
     manifest: {
-      name: "Milhi v0.8: Registro de compra-venta",
-      short_name: "Milhi",
+      name: "Bisne: Registro de compra-venta",
+      short_name: "Bisne",
+      description: "Registra entradas y salidas de productos asî como puntos de venta y recepción. ",
       theme_color: "#ffffff",
+      start_url:'/',
+      orientation: 'portrait',
       icons: [
         {
           src: "pwa-64x64.png",
@@ -94,6 +101,20 @@ export default defineNuxtConfig({
           purpose: "maskable",
         },
       ],
+      screenshots:[
+        {
+          src: "https://images.ecency.com/DQmcU2J5h2S819r7sYfHo8QrFdVDVwFxU6JcSWKdq2hka2z/deniro_tr.jpg",//TODO: screenshots
+          sizes: "1280x720",
+          type: "image/png",
+          form_factor: "wide",
+        },
+        {
+          src: "https://images.ecency.com/DQmcU2J5h2S819r7sYfHo8QrFdVDVwFxU6JcSWKdq2hka2z/deniro_tr.jpg",//TODO: screenshots
+          sizes: "320x568",
+          type: "image/png",
+        },
+      ],
+      display_override: ["fullscreen", "minimal-ui"],
       display: "standalone",
     },
     workbox: {
@@ -101,7 +122,7 @@ export default defineNuxtConfig({
       cleanupOutdatedCaches: true,
       clientsClaim: true,
       skipWaiting: true,
-      navigateFallback: "/index.html",
+      navigateFallback: "/index.html", //ensures SPA routing offline
       runtimeCaching: [
         {
           urlPattern: /\.(?:png|jpg|jpeg|gif|bmp|tiff|webp|svg|icon|woff2?)$/,
@@ -116,7 +137,7 @@ export default defineNuxtConfig({
       ],
     },
     devOptions: {
-      enabled: false,
+      enabled: true,
       type: "module",
       navigateFallback: "/",
     },
@@ -124,4 +145,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  nitro:{
+    preset: 'static' //WIP: ensures generate mode is properly static
+  }
 });
